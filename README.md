@@ -101,7 +101,7 @@
 **Android**
 
 1. 打开Android Studio ，点击菜单 File->New->New Project... 创建一个新的工程；
-2. 把解压的 hm-mqtt-sdk-v1_20171221.jar（具体jar名称可能有区别） 添加到工程 libs目录；
+2. 把解压的 hm-mqtt-sdk-v1_20171221.jar、ltlink2.jar、libAES128Converter.so（具体jar名称可能有区别） 添加到工程 libs目录；
 3. 在APP的build.gradle文件中添加sdk、json、http库的引用
 ```
  dependencies {
