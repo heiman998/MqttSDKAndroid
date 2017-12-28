@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+
+    android:paddingBottom="40dp">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="top"
+        android:background="@color/tatten_bg">
+
+        <TextView
+            android:id="@+id/set_accessid_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/ModifytheresourceID"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:paddingLeft="10dp"
+        android:text="Company ID:"
+        android:textColor="#6E6E6E"
+        android:visibility="gone" />
+
+    <com.heiman.mqttdemo.view.ClearableEditText
+        android:id="@+id/edit_company_id"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/Pleaseinputcompany_id"
+        android:singleLine="true"
+        android:textColor="#333"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:paddingLeft="10dp"
+        android:text="Email:"
+        android:textColor="#6E6E6E" />
+
+    <com.heiman.mqttdemo.view.ClearableEditText
+        android:id="@+id/edit_email"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/activity_color"
+        android:hint="@string/Pleaseenterthemailbox"
+        android:singleLine="true"
+        android:textColor="#333"
+        android:textColorHint="#666666"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:paddingLeft="10dp"
+        android:text="Password:"
+        android:textColor="#6E6E6E" />
+
+    <com.heiman.mqttdemo.view.ClearableEditText
+        android:id="@+id/edit_passwd"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/activity_color"
+        android:hint="@string/Pleaseinputpassword"
+        android:singleLine="true"
+        android:textColor="#333"
+        android:textColorHint="#666666"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:paddingLeft="10dp"
+        android:text="@string/email_phoen_password_app_email"
+        android:textColor="#6E6E6E" />
+
+</LinearLayout>

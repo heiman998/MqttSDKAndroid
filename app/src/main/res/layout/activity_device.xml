@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/log_view"
+            android:layout_width="fill_parent"
+            android:layout_height="400dp">
+
+            <LinearLayout
+                android:id="@+id/lin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="清空" />
+
+
+                <Button
+                    android:id="@+id/btn_stop_read"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="停止/启动接收" />
+
+                <Button
+                    android:id="@+id/btn_stop_scroll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="停止/启动滚动"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btn_send_set"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="设置数据" />
+
+                <Button
+                    android:id="@+id/btn_send_get"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="获取数据" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/send_lin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/lin"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <EditText
+                    android:id="@+id/et_data"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btn_send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:text="发送" />
+            </LinearLayout>
+
+            <ScrollView
+                android:id="@+id/scroll"
+                android:layout_width="fill_parent"
+                android:layout_height="450dp"
+                android:layout_below="@id/send_lin"
+                android:background="#e0000000">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/log_text"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:editable="true"
+                        android:gravity="top"
+                        android:scrollbars="vertical"
+                        android:singleLine="false"
+                        android:textColor="#FFDC35" />
+                </LinearLayout>
+            </ScrollView>
+        </RelativeLayout>
+
+
+    </FrameLayout>
+
+</LinearLayout>

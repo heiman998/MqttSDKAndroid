@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+
+    <dbname value="HmMqttDemo" />
+    <version value="1" />
+    <list>
+        <mapping class="com.heiman.mqttdemo.base.Device" />
+    </list>
+
+</litepal>
