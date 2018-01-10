@@ -1,4 +1,7 @@
-#**海曼MQtt Android SDK集成文档**
+
+# **海曼MQtt Android SDK集成文档**
+
+
 
 - [简介](#Introduction)
 		- [平台简介](#Platform_Introduction)
@@ -75,20 +78,26 @@
 
 为了您更好的使用提供的服务，使用前需要先登录企业管理后台注册企业账号，并添加产品和导入测试设备。
 
-###2.1.1 注册企业账号
+
+### 2.1.1 注册企业账号
+
 1. 向我司提供所需的注册账号。
 2. 我司提供相应后台地址。
 3. 进入后台配置相关信息 
 4. 或通过我司提供后台开发协议进行后台开发功能。
  
+ 
 
-###2.1.2 添加产品
+### 2.1.2 添加产品
+
 1. 登录企业管理后台
 2. 点击左侧“添加产品”按钮
 3. 输入产品信息进行添加 
   
 
-###2.2  <a name="setp1" >Setp 1 下载SDK工具包</a>
+
+### 2.2  <a name="setp1" >Setp 1 下载SDK工具包</a>
+
 1. SDK下载地址 
 2. 解压下载的SDK，目录结构如下图  
 
@@ -96,7 +105,9 @@
 -
 - 注：为了简化Http接口调用，Android透传SDK中提供了HmHttpManage类源码供开发者使用，使用时需要替换HttpManage.COMPANY_ID为注册的企业ID,以及登录成功后替换ACCESSTOKEN和userId。 此文档中涉及到Android Http接口的调用都以HmHttpManage类为例说明。
 
-###2.3 <a name="setp2" >Setp 2 开发环境配置</a>
+
+### 2.3 <a name="setp2" >Setp 2 开发环境配置</a>
+
 
 **Android**
 
@@ -117,11 +128,11 @@
 
 **IOS**
 
-1. 配置头文件搜索路径:进入Xcode工程属性页面，进入BuildSettings标签，找到HeaderSearchPaths选项，将libxlink/include目录加入SearchPaths；
-2. 配置库引用:进入Xcode工程属性页面，进入BuildSettings标签，找到OtherLinkerFlags选项，加入-lxlinksdklib参数；
-3. 配置库文件搜索路径:进入Xcode工程属性页面，进入BuildSettings标签，找到LibrarySearchPaths选项，将libxlink/lib下针对模拟器和实体机加载的库的路径配置到SearhPaths中。
 
-###2.4 <a name="setp3" >Setp 3 初始化SDK</a>
+
+
+### 2.4 <a name="setp3" >Setp 3 初始化SDK</a>
+
 
 **Android**
 
@@ -189,7 +200,9 @@
 	//可以在该监听器中直接更新UI
 	``` 
 
-####注意：
+
+#### 注意：
+
   调用初始化方法XlinkAgent.init(Context)和添加监听的回调XlinkNetListener方法不能在子线程中进行操作，否则可能会出错
 
 
@@ -197,7 +210,9 @@
     **IOS**
 
 
-###2.5 <a name="setp4" >Setp 4 注册、登录用户账号</a>
+
+### 2.5 <a name="setp4" >Setp 4 注册、登录用户账号</a>
+
 
 1. **用户注册**
 
@@ -301,7 +316,7 @@
 
 	```
 
-###2.6 <a name="setp5" >Setp 5 添加设备</a>
+### 2.6 <a name="setp5" >Setp 5 添加设备</a>
 
 SDK封装了配置设备加网功能，可以使用SDK方法配置设备网络并发现内网连接的设备，并加入到SDK中。 也可以通过网络获取订阅设备的必要参数，通过Json转成设备实体并添加到SDK中。 只有把设备对象添加到SDK中并初始化设备，才能进行设备的连接、控制等操作。
   
@@ -370,7 +385,7 @@ SDK封装了配置设备加网功能，可以使用SDK方法配置设备网络�
 
 	```
 
-###2.7 <a name="setp6" >Setp 6 连接设备</a>
+### 2.7 <a name="setp6" >Setp 6 连接设备</a>
 
 1. 连接设备用于探测设备状态，并与之建立网络通道。外网连接需要先订阅设备（SDK内部会自动订阅，如果连接返回设备订阅关系错误如设备AccessKey不存在情况，设备Accesskey通过服务器生产每一类产品有一个Accesskey，则需要手动调用订阅方法进行订阅）。
 SKD会根据网络连接情况自适应内外网络环境，会自动选择速度快的网络进行设备连接。 
@@ -448,7 +463,7 @@ SKD会根据网络连接情况自适应内外网络环境，会自动选择速�
 	```
 	```
 
-###2.8 <a name="setp7" >Setp 7 设备控制&接收设备数据</a>
+### 2.8 <a name="setp7" >Setp 7 设备控制&接收设备数据</a>
 
 1. 设备连接成功后，即可对设备进行控制和获取设备的属性等信息。 设备控制可通过透传数据包  。
 SDK
@@ -473,21 +488,22 @@ SDK
 	```
 	```
 	
-###2.9 <a name="setp8" >Setp 8 推送集成</a>
+### 2.9 <a name="setp8" >Setp 8 推送集成</a>
 如需增加SDK推送，目前支持
 [极光推送](https://docs.jiguang.cn/jpush/client/Android/android_3m/)
 [信鸽推送](http://docs.developer.qq.com/xg/android_access.html)
 
-##三、<a name="api">API文档</a>
+## 三、<a name="api">API文档</a>
 
-####Android：
+ **Android：**
 
 具体参考[SDK接口说明](https://github.com/heiman998/MqttSDKAndroid/tree/master/SDK%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E)
-####IOS：
+
+**IOS：**
 
 具体参考[SDK接口说明]()
 
-##四、<a name="Glossary">术语表</a>
+## 四、<a name="Glossary">术语表</a>
 
 
 > | 术语 | 解释 |
@@ -508,9 +524,9 @@ SDK
 
 
 
-##五、<a name="history">更新历史</a>
+## 五、<a name="history">更新历史</a>
 
-####Android:
+**Android:**
 
 2017-12-21：发布初步版本协议以及SDK
 
@@ -518,6 +534,6 @@ SDK
 
 
 
-####IOS
+**IOS**
 
- # MqttSDKAndroid
+#  MqttSDKAndroid
