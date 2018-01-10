@@ -476,12 +476,13 @@ SDK
 ###2.9 <a name="setp8" >Setp 8 推送集成</a>
 如需增加SDK推送，目前支持
 [极光推送](https://docs.jiguang.cn/jpush/client/Android/android_3m/)
+[信鸽推送](http://docs.developer.qq.com/xg/android_access.html)
 
 ##三、<a name="api">API文档</a>
 
 ####Android：
 
-具体参考[SDK接口说明]()
+具体参考[SDK接口说明](https://github.com/heiman998/MqttSDKAndroid/tree/master/SDK%E6%8E%A5%E5%8F%A3%E8%AF%B4%E6%98%8E)
 ####IOS：
 
 具体参考[SDK接口说明]()
