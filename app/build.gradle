@@ -2,6 +2,9 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
+    lintOptions {
+        abortOnError false
+    }
     defaultConfig {
         applicationId "com.heiman.mqttdemo"
         minSdkVersion 19
@@ -14,6 +17,10 @@ android {
             abiFilters 'armeabi'//, 'armeabi-v7a', 'arm64-v8a'
 //        // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
         }
+        manifestPlaceholders = [
+                XG_ACCESS_ID : "2100274667",
+                XG_ACCESS_KEY: "AE8N8PH9R35N",
+        ]
     }
     buildTypes {
         release {
@@ -38,27 +45,36 @@ repositories {
     google()
 }
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:26+'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation 'com.android.support:design:26.1.0'
+    implementation 'com.android.support:design:26+'
+    implementation 'com.google.android.gms:play-services-maps:11.8.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compile 'com.mylhyl:circleDialog:2.2.0'
-
-//    compile 'org.greenrobot:greendao:3.2.2' // add library
+    //    compile 'org.greenrobot:greendao:3.2.2' // add library
     compile 'net.zetetic:android-database-sqlcipher:3.5.6'
     compile 'org.litepal.android:core:1.6.0'
     compile 'com.kaopiz:kprogresshud:1.1.0'
-    compile 'se.wetcat.qatja:core:1.0.3' //mqtt 服务
+    compile 'se.wetcat.qatja:core:1.0.3'
+    //mqtt 服务
     compile 'com.orhanobut:logger:2.1.1'
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.lzy.net:okgo:+'
     compile 'com.lzy.net:okrx:+'
     compile 'com.lzy.net:okserver:2.0.5'
-    compile 'com.tencent.bugly:crashreport:latest.release' //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
-    compile 'com.tencent.bugly:nativecrashreport:latest.release' //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
-
+    compile 'com.tencent.bugly:crashreport:latest.release'
+    //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.1.9
+    compile 'com.tencent.bugly:nativecrashreport:latest.release'
+    //其中latest.release指代最新Bugly NDK版本号，也可以指定明确的版本号，例如3.0
+    implementation project(':dialog')
+    //信鸽3.2.1 beta 版本
+//信鸽jar
+    compile 'com.tencent.xinge:xinge:3.2.1-beta'
+//wup包
+    compile 'com.tencent.wup:wup:1.0.0.E-release'
+//mid包
+    compile 'com.tencent.mid:mid:4.0.0-beta'
 }

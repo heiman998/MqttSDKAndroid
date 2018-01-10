@@ -4,6 +4,7 @@ import com.google.gson.stream.JsonReader;
 import com.heiman.mqttdemo.base.Code;
 import com.heiman.mqttdemo.base.SimpleResponse;
 import com.heiman.mqttsdk.http.HmHttpConstant;
+import com.heiman.mqttsdk.http.HmHttpManage;
 import com.heiman.utils.Convert;
 import com.lzy.okgo.convert.Converter;
 import com.orhanobut.logger.Logger;
@@ -125,58 +126,57 @@ public class JsonConvert<T> implements Converter<T> {
                 //一般来说服务器会和客户端约定一个数表示成功，其余的表示失败，这里根据实际情况修改
                 //直接将服务端的错误信息抛出，onError中可以获取
                 int code = httpCode.code;
-                if (code == HmHttpConstant.SUCCESS || code == 0) {
-                    //noinspection unchecked
-                    return (T) httpCode;
-                } else if (code == HmHttpConstant.ERROR_434626) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434627) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434628) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434629) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434630) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434631) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434632) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434633) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434634) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434635) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434636) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434637) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434638) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434639) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434640) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434641) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434642) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434643) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434644) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434645) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else if (code == HmHttpConstant.ERROR_434646) {
-                    throw new IllegalStateException(httpCode.msg);
-                } else {
-                    Logger.e("错误代码：" + code + "，错误信息：" + httpCode.msg);
-                    throw new IllegalStateException("错误代码：" + code + "，错误信息：" + httpCode.msg);
-
+                switch (code) {
+                    case HmHttpConstant.SUCCESS:
+                    case 0:
+                        //noinspection unchecked
+                        return (T) httpCode;
+                    case HmHttpConstant.ERROR_434626:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434627:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434628:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434629:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434630:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434631:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434632:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434633:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434634:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434635:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434636:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434637:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434638:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434639:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434640:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434641:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434642:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434643:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434644:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434645:
+                        throw new IllegalStateException(httpCode.msg);
+                    case HmHttpConstant.ERROR_434646:
+                        throw new IllegalStateException(httpCode.msg);
+                    default:
+                        Logger.e("错误代码：" + code + "，错误信息：" + httpCode.msg);
+                        throw new IllegalStateException("错误代码：" + code + "，错误信息：" + httpCode.msg);
                 }
-
-
             }
         }
     }

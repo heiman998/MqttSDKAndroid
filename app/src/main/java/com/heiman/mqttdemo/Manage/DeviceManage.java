@@ -7,11 +7,9 @@ import android.text.TextUtils;
 
 import com.heiman.mqttdemo.base.Device;
 import com.heiman.mqttsdk.HmAgent;
-import com.heiman.utils.HmUtils;
 import com.orhanobut.logger.Logger;
 
 import org.litepal.crud.DataSupport;
-import org.litepal.crud.callback.FindMultiCallback;
 import org.litepal.crud.callback.SaveCallback;
 import org.litepal.crud.callback.UpdateOrDeleteCallback;
 

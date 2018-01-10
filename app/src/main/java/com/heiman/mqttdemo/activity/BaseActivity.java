@@ -1,5 +1,6 @@
 package com.heiman.mqttdemo.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,8 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 
 import com.heiman.mqttdemo.Constant;
+import com.heiman.mqttsdk.http.HmHttpManage;
 import com.heiman.mqttsdk.manage.HmDeviceManage;
+import com.heiman.mqttsdk.manage.HmSubDeviceManage;
 import com.heiman.mqttsdk.modle.HmDevice;
+import com.heiman.mqttsdk.modle.HmSubDevice;
+import com.heiman.utils.HmUtils;
 import com.orhanobut.logger.Logger;
 
 /**
@@ -17,9 +22,13 @@ import com.orhanobut.logger.Logger;
  * @Description :
  * @Modify record :
  */
+@SuppressLint("Registered")
 public class BaseActivity extends AppCompatActivity {
     public Context mContext;
     public HmDevice hmDevice;
+    public boolean isSub = false;
+    public HmSubDevice hmSubDevice;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +46,16 @@ public class BaseActivity extends AppCompatActivity {
         if (bundle != null) {
             //接收name值
             String mac = bundle.getString(Constant.DEVICE_MAC);
-
-            hmDevice = HmDeviceManage.getInstance().getDevice(mac);
+            if (!HmUtils.isEmptyString(mac)) {
+                hmDevice = HmDeviceManage.getInstance().getDevice(mac);
+            }
+            String subMac = bundle.getString(Constant.DEVICE_SUB_MAC);
+            if (!HmUtils.isEmptyString(subMac)) {
+                isSub = true;
+                int index = bundle.getInt(Constant.DEVICE_SUB_INDEX);
+                hmSubDevice = HmSubDeviceManage.getInstance().getDevice(mac, index);
+                Logger.e("hmSubDevice:" + hmSubDevice.getDeviceType());
+            }
         }
     }
 

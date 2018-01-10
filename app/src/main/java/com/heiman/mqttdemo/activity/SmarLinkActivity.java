@@ -20,9 +20,11 @@ import com.heiman.mqttdemo.Manage.DeviceManage;
 import com.heiman.mqttdemo.R;
 import com.heiman.mqttdemo.back.Dialogback;
 import com.heiman.mqttdemo.base.Device;
+import com.heiman.mqttdemo.base.RegisterDevice;
 import com.heiman.mqttsdk.http.HmHttpManage;
 import com.heiman.mqttsdk.modle.DeviceBean;
 import com.heiman.mqttsdk.modle.HmDevice;
+import com.heiman.mqttsdk.modle.HmDeviceType;
 import com.heiman.mqttsdk.modle.SmartLink;
 import com.heiman.mqttsdk.smartlinkutils.ConfigCallback;
 import com.heiman.mqttsdk.smartlinkutils.Smartlink;
@@ -40,6 +42,7 @@ import com.orhanobut.logger.Logger;
 public class SmarLinkActivity extends BaseActivity implements View.OnClickListener {
 
 
+    private static final int MESSAGE_SUBSCRIBE_DEVICE = 1090;
     private TextView tvwifiname;
     private EditText etwifipass;
     private Button btnstart;
@@ -78,26 +81,36 @@ public class SmarLinkActivity extends BaseActivity implements View.OnClickListen
                     smartlink.release();
                     Logger.e("TEST", "IP:" + link.getDevice().getDeviceIP() + "MAC:" + link.getDevice().getMacAddress());
                     Toast.makeText(SmarLinkActivity.this, "配置成功！" + link.getDevice().getMacAddress(), Toast.LENGTH_SHORT).show();
-                    HmDevice hmDevice = new HmDevice();
-                    Device device = new Device();
-                    device.setMac(link.getDevice().getMacAddress());
+                    final HmDevice hmDevice = new HmDevice();
                     hmDevice.setDeviceMac(link.getDevice().getMacAddress());
                     if (!HmUtils.isEmptyString(link.getDevice().getDeviceIP())) {
                         hmDevice.setDeviceIP(link.getDevice().getDeviceIP());
                     }
                     hmDevice.setPid(10000);
                     hmDevice.setFactoryID(1000);
-                    device.setHmDevice(hmDevice);
-                    DeviceManage.getInstance().addDevice(device);
-                    HmHttpManage.getInstance().onRegisterDevice(hmDevice.getPid()+"", hmDevice.getDeviceMac(), "1", "1", hmDevice.getDeviceMac(), new Dialogback<Object>(SmarLinkActivity.this) {
+                    hmDevice.setType(HmDeviceType.DEVICE_WIFI_GATEWAY_HS1GW_NEW.getValue());
+                    hmDevice.setAcckey("bd17df6d548211e7");
+                    HmHttpManage.getInstance().onRegisterDevice(hmDevice.getPid() + "", hmDevice.getDeviceMac(), "1", "1", hmDevice.getDeviceMac(), new Dialogback<RegisterDevice>(SmarLinkActivity.this) {
                         @Override
-                        public void onSuccess(Response<Object> response) {
+                        public void onSuccess(Response<RegisterDevice> response) {
                             Logger.i(response.message());
                             Logger.i(response.body().toString());
                             Logger.i(response.code() + "");
+                            hmDevice.setDeviceID(response.body().getId());
+                            hmDevice.setDeviceName(response.body().getName());
+                            Device device = new Device();
+                            device.setMac(response.body().getMac());
+                            device.setHmDevice(hmDevice);
+                            DeviceManage.getInstance().addDevice(device);
+                            Message message = new Message();
+                            message.obj = response.body();
+                            message.what = MESSAGE_SUBSCRIBE_DEVICE;
+                            mHandler.sendMessage(message);
+
                         }
+
                         @Override
-                        public void onError(Response<Object> response) {
+                        public void onError(Response<RegisterDevice> response) {
                             if (response != null) {
                                 Logger.i(response.message());
                                 Logger.i(response.code() + "");
@@ -108,6 +121,26 @@ public class SmarLinkActivity extends BaseActivity implements View.OnClickListen
                     finish();
                     break;
                 }
+                case MESSAGE_SUBSCRIBE_DEVICE:
+                    RegisterDevice registerDevice = (RegisterDevice) msg.obj;
+                    HmHttpManage.getInstance().onSubscribeDevice(registerDevice.getId(), new Dialogback<Object>(SmarLinkActivity.this) {
+                        @Override
+                        public void onSuccess(Response<Object> response) {
+                            Logger.i(response.message());
+                            Logger.i(response.body().toString());
+                            Logger.i(response.code() + "");
+                        }
+
+                        @Override
+                        public void onError(Response<Object> response) {
+                            if (response != null) {
+                                Logger.i(response.message());
+                                Logger.i(response.code() + "");
+                                Logger.i(response.getException() + "");
+                            }
+                        }
+                    });
+                    break;
                 case MSG_SMARTLINK_FAIL:
                     smartlink.stopConfig();
                     smartlink.setConfigCallback(null);

@@ -10,11 +10,14 @@ public class Constant {
 
 
     public static final String DEVICE_MAC = "Device-mac";
+    public static final String DEVICE_SUB_MAC = "Device-sub-mac";
+    public static final String DEVICE_SUB_INDEX = "Device-sub-index";
     public static final String DATA = "DATA";
     public static final String ADD_SUB_DEVICE = "add-device";
     public static final String DELETE_SUB = "device-sub";
     public static final String UPDATAIRMWARE = "up-dataairmwre";
     public static final String GATEWAY_SUB_ONLIE = "gateway-sub-onlie";
+    public static final String SUB_SS_BASE = "sub-ss-base";
     public static final String RGB_SETTING = "rgb-setting";
     public static final String THP_SETTING = "thp-setting";
     public static final String PLUG_SETTING = "plug-setting";

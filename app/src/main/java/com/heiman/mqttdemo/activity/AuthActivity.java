@@ -55,10 +55,10 @@ public class AuthActivity extends BaseActivity {
                 }
                 HmApplication.setLogin(response.body());
                 HmHttpManage.setAccessToken(response.body().getAccess_token());
-                HmHttpManage.setEnterpriseId("1");
                 HmHttpManage.setUserId(response.body().getUserId() + "");
 
                 openActivity(MainActivity.class);
+                finish();
             }
 
             @Override

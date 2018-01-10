@@ -1,18 +1,24 @@
 package com.heiman.mqttdemo;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 
+import com.google.gson.Gson;
 import com.heiman.mqttdemo.Manage.DeviceManage;
+import com.heiman.mqttdemo.back.Dialogback;
 import com.heiman.mqttdemo.base.Device;
 import com.heiman.mqttdemo.base.Login;
 import com.heiman.mqttsdk.HmAgent;
+import com.heiman.mqttsdk.http.HmHttpManage;
 import com.heiman.mqttsdk.listtner.HmConnectDevice;
 import com.heiman.mqttsdk.listtner.HmGatewayListener;
 import com.heiman.mqttsdk.listtner.HmNetListener;
+import com.heiman.mqttsdk.manage.HmDeviceManage;
 import com.heiman.mqttsdk.modle.HmDevice;
 import com.heiman.mqttsdk.modle.HmEPlug;
 import com.heiman.mqttsdk.modle.HmFourLight;
@@ -21,11 +27,15 @@ import com.heiman.mqttsdk.modle.HmOnoff;
 import com.heiman.mqttsdk.modle.HmPlug;
 import com.heiman.mqttsdk.modle.HmRelay;
 import com.heiman.mqttsdk.modle.HmRgb;
+import com.heiman.mqttsdk.modle.HmSSBase;
 import com.heiman.mqttsdk.modle.HmSoundLightAlarm;
+import com.heiman.mqttsdk.modle.HmSubDevice;
 import com.heiman.mqttsdk.modle.HmThp;
 import com.heiman.mqttsdk.modle.HmTimer;
 import com.heiman.utils.Convert;
 import com.heiman.utils.HmUtils;
+import com.hss01248.dialog.ActivityStackManager;
+import com.hss01248.dialog.StyledDialog;
 import com.orhanobut.logger.Logger;
 import com.tencent.bugly.crashreport.CrashReport;
 
@@ -56,13 +66,6 @@ public class HmApplication extends Application implements HmNetListener, HmGatew
     public static SharedPreferences sharedPreferences;
 
     private static Login login;
-
-
-    //    private DaoMaster.DevOpenHelper mHelper;
-//    private SQLiteDatabase db;
-//    private DaoMaster mDaoMaster;
-//    private DaoSession mDaoSession;
-
     public static HmApplication instances;
 
     @Override
@@ -73,11 +76,49 @@ public class HmApplication extends Application implements HmNetListener, HmGatew
         instances = this;
         sharedPreferences = getSharedPreferences("HmOffciaDemo", Context.MODE_PRIVATE);
         init();
-        setDatabase();
         initLiteSDK();
         initDevice();
+        StyledDialog.init(this);
+        registCallback();
         CrashReport.initCrashReport(getApplicationContext(), "f46a72b1b7", true);
+    }
 
+    private void registCallback() {
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                ActivityStackManager.getInstance().addActivity(activity);
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+                ActivityStackManager.getInstance().removeActivity(activity);
+            }
+        });
     }
 
     private void initLiteSDK() {
@@ -101,29 +142,6 @@ public class HmApplication extends Application implements HmNetListener, HmGatew
         HmApplication.instances = instances;
     }
 
-    /**
-     * 设置greenDao
-     */
-    private void setDatabase() {
-        // 通过 DaoMaster 的内部类 DevOpenHelper，你可以得到一个便利的 SQLiteOpenHelper 对象。
-        // 可能你已经注意到了，你并不需要去编写「CREATE TABLE」这样的 SQL 语句，因为 greenDAO 已经帮你做了。
-        // 注意：默认的 DaoMaster.DevOpenHelper 会在数据库升级时，删除所有的表，意味着这将导致数据的丢失。
-        // 所以，在正式的项目中，你还应该做一层封装，来实现数据库的安全升级。
-//        mHelper = new DaoMaster.DevOpenHelper(this, DeviceDao.TABLENAME+".db", null);
-//        db = mHelper.getWritableDatabase();
-//        // 注意：该数据库连接属于 DaoMaster，所以多个 Session 指的是相同的数据库连接。
-//        mDaoMaster = new DaoMaster(db);
-//        mDaoSession = mDaoMaster.newSession();
-    }
-
-//    public DaoSession getDaoSession() {
-//        return mDaoSession;
-//    }
-
-//    public SQLiteDatabase getDb() {
-//        return db;
-//    }
-
     // 初始化 JPush。如果已经初始化，但没有登录成功，则执行重新登录。
     private void init() {
         JPushInterface.init(getApplicationContext());
@@ -137,23 +155,25 @@ public class HmApplication extends Application implements HmNetListener, HmGatew
     @Override
     public void onLogin(int code) {
         Logger.i("onStart:" + code);
-        if (code == STATE_NONE) {
+        switch (code) {
+            case STATE_NONE:
 
-        } else if (code == STATE_CONNECTED) {
-            HmDevice hmDevice = new HmDevice();
-            hmDevice.setDeviceMac("845DD76814C6");
-            hmDevice.setPid(10000);
-            hmDevice.setFactoryID(1000);
-            hmDevice.setAcckey("bd17df6d548211e7");
-            HmAgent.getInstance().initDevice(hmDevice);
-            HmAgent.getInstance().connectDevice(hmDevice, new HmConnectDevice() {
-                @Override
-                public void onConnectDevice(HmDevice hmDevice, int code) {
-                    Logger.e("hmDevice:" + code);
+                break;
+            case STATE_CONNECTED:
+                List<Device> deviceList = DeviceManage.getInstance().getDevices();
+                for (Device device : deviceList) {
+                    HmAgent.getInstance().initDevice(device.getHmDeviceSDK());
+                    HmAgent.getInstance().connectDevice(device.getHmDeviceSDK(), new HmConnectDevice() {
+                        @Override
+                        public void onConnectDevice(HmDevice hmDevice, int code) {
+                            Logger.e("hmDevice:" + code);
+                        }
+                    });
                 }
-            });
-        } else if (code == STATE_CONNECTION_FAILED) {
-            Logger.e("HmApplication:服务器连接失败!");
+                break;
+            case STATE_CONNECTION_FAILED:
+                Logger.e("HmApplication:服务器连接失败!");
+                break;
         }
     }
 
@@ -191,7 +211,15 @@ public class HmApplication extends Application implements HmNetListener, HmGatew
 
     @Override
     public void onDeviceInfo(HmDevice hmDevice) {
+        Device device = DeviceManage.getInstance().getDevice(hmDevice.getDeviceMac());
+        device.setHmDevice(hmDevice);
+        DeviceManage.getInstance().addDevice(device);
         sendPipeBroad(Constant.DEVICE_INFO, hmDevice, Convert.toJson(hmDevice));
+    }
+
+    @Override
+    public void onSubDeviceInfo(HmDevice hmDevice, HmSubDevice hmSubDevice) {
+        sendPipeBroad(Constant.DEVICE_INFO, hmDevice, Convert.toJson(hmSubDevice));
     }
 
     @Override
@@ -212,12 +240,17 @@ public class HmApplication extends Application implements HmNetListener, HmGatew
 
     @Override
     public void onUpDatairmware(HmDevice hmDevice, int fType, boolean enbale, int type) {
-        sendPipeBroad(Constant.UPDATAIRMWARE, hmDevice, "");
+        sendPipeBroad(Constant.UPDATAIRMWARE, hmDevice, "fType:" + fType + "enbale:" + enbale + "type:" + type);
     }
 
     @Override
     public void onGatewaySubOnlie(HmDevice hmDevice, int index) {
         sendPipeBroad(Constant.GATEWAY_SUB_ONLIE, hmDevice, index + "");
+    }
+
+    @Override
+    public void onSubSSBase(HmDevice hmDevice, HmSubDevice hmSubDevice, HmSSBase hmSSBase) {
+        sendPipeBroad(Constant.SUB_SS_BASE, hmDevice, hmSSBase.getJsonString());
     }
 
     @Override
@@ -232,7 +265,7 @@ public class HmApplication extends Application implements HmNetListener, HmGatew
 
     @Override
     public void onPlugSetting(HmDevice hmDevice, int index, HmPlug hmPlug) {
-        sendPipeBroad(Constant.PLUG_SETTING, hmDevice, Convert.toJson(hmPlug));
+        sendPipeBroad(Constant.PLUG_SETTING, hmDevice,hmPlug.getJsonString());
     }
 
     @Override
@@ -285,12 +318,20 @@ public class HmApplication extends Application implements HmNetListener, HmGatew
         sendPipeBroad(Constant.ERROR, hmDevice, HmUtils.getHexBinString(data));
     }
 
+    @Override
+    public void onSLLinkAlarm(HmDevice hmDevice, HmSubDevice hmSubDevice, int en, List<Integer> indexList, List<Integer> alarmTypeList) {
+
+    }
+
     /**
      * 发送广播
      *
-     * @param action 广播动作
-     * @param device 设备
-     * @param data   广播数据
+     * @param action
+     *         广播动作
+     * @param device
+     *         设备
+     * @param data
+     *         广播数据
      */
     public void sendPipeBroad(String action, HmDevice device, String data) {
         Intent intent = new Intent(action);
