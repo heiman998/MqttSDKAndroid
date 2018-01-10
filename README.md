@@ -220,12 +220,12 @@
 
 	**注：使用邮箱注册用户后，系统会往注册的邮箱发送一封认证激活邮件，需要查看邮件并点击邮箱中的链接进行账号激活后才能正常使用账号。**
 
-	**Android调用示例**
+**Android调用示例**
 
 	**为了简化Http接口调用，Android透传SDK中提供了HmHttpManage类源码供开发者使用，使用时需要替换HttpManage.COMPANY_ID为注册的企业ID,以及登录成功后替换ACCESSTOKEN和userId。 此文档中涉及到Android Http接口的调用都以HmHttpManage类为例说明。**
 
 
-	```
+```
  HmHttpManage.getInstance().onRegister(uid, passwprd, new Dialogback<Code<Register>>(this) {
             @Override
             public void onSuccess(Response<Code<Register>> response) { 
@@ -237,48 +237,43 @@
  				//登录失败
             }
         });
-	```
+```
 
-	**IOS调用示例**
-
-	**开发者需要手动将HttpRequest里面的宏定义 CorpId 后面的企业ID修改为自己企业的企业ID**
-
-	```
-	+(void)registerWithAccount:(NSString *)account withNickname:(NSString *)nickname withVerifyCode:(NSString *)verifyCode withPassword:(NSString *)pwd didLoadData:(MyBlock)block;
-	```
+**IOS调用示例**
 
 2. **用户验证**
 
 	调用Http RESTful接口进行用户验证，需要企业ID，可在企业后台获取。 登陆与认证是用户通过账号（邮箱或者手机号）和密码获取RESTful接口调用凭证的方式，成功认证后会获得一个有效的调用凭证和一个有效的刷新凭证。
     调用凭证有效期为2个小时。在凭证失效前需要调用刷新用户凭证。
-
-	**Android 调用示例**
-
-	```
- HmHttpManage.getInstance().onLogin(email, passwprd, new Dialogback<Code<Login>>(this) {
+    
+**Android 调用示例**
+	
+```
+ HmHttpManage.getInstance().onLogin(email, passwprd, new Dialogback<Login>(this) {
             @Override
-            public void onSuccess(Response<Code<Login>> response) { 
-            	//登录成功回调
+            public void onSuccess(Response<Login> response) {
+            //登录成功
             }
 
             @Override
-            public void onError(Response<Code<Login>> response) {
- 				//登录失败
-            }
+            public void onError(Response<Login> response) {
+            //登录失败
+             }
         });
-	```
+```
 
-	**IOS 调用示例**
+**IOS 调用示例**
 
-	```
- 	```
+```
+	
+```
 
 3. **登录SDK**
 
 	用户验证成功后，需要使用“userId”和“ACCESSTOKEN”调用SDK登录函数登录云端后才能使用远程设备连接、控制功能。 
 
 	**Android  调用示例**
-
+	
 	```
     //启用服务， 设备发现，设置AccessKey等依赖此服务
       HmAgent.getInstance().start(new HmStart() {
@@ -289,14 +284,10 @@
                 }
             }
         });
-  ```
-  ```
     //登录SDK 启用云端远程服务
      HmAgent.getInstance().connect(HmConstant.host, HmConstant.port,
                             "AndroidMqttSDK", "AndroidMqttSDK",
-                            "U_" + HmApplication.getLogin().getAccess_token()); 
-   ```
-   ```             
+                            UUID.randomUUID().toString()); 
     // 回调登录xlink状态
     @Override
     public void onLogin(int code) {
@@ -319,14 +310,12 @@
 ### 2.6 <a name="setp5" >Setp 5 添加设备</a>
 
 SDK封装了配置设备加网功能，可以使用SDK方法配置设备网络并发现内网连接的设备，并加入到SDK中。 也可以通过网络获取订阅设备的必要参数，通过Json转成设备实体并添加到SDK中。 只有把设备对象添加到SDK中并初始化设备，才能进行设备的连接、控制等操作。
-  
- 
 
 2. 内网配网关设备
 
-	**Android  调用示例具体方法参照Demo中SmarLinkActivity**
+    **Android  调用示例具体方法参照Demo中SmarLinkActivity**
 
-	```
+    ```
  	if (isStart) {
                     mHandler.sendEmptyMessageDelayed(MSG_SMARTLINK_FAIL, UPDATE_FIRMWARE_FAIL_TIME);
                     try {
@@ -359,11 +348,7 @@ SDK封装了配置设备加网功能，可以使用SDK方法配置设备网络�
                     etwifipass.setFocusable(true);
                     etwifipass.setFocusableInTouchMode(true);
                     etwifipass.requestFocus();
-                }
-	
-	```
-	
-	```
+                } 
 	//APP收到注册设备到云端
 	 HmHttpManage.getInstance().onRegisterDevice(hmDevice.getPid()+"", hmDevice.getDeviceMac(), "1", "1", hmDevice.getDeviceMac(), new Dialogback<<Code<RegisterDevice>>>(SmarLinkActivity.this) {
                         @Override
@@ -408,8 +393,7 @@ SKD会根据网络连接情况自适应内外网络环境，会自动选择速�
 	//根据上一步内网发现的设备，使用AccesKey和subKey进行设备连接 如设备未设置AccessKey，连接前需要先进行AccessKey设置。 HmAgent.getInstance().connectDevice(device.getXDevice(),device.getXDevice().getAccessKey(),device.getXDevice().getSubKey(), connectDeviceListener);
         if (ret < 0) {// 调用设备失败
             //返回小于0 表示扫描失败， 具体错误码参见API文档附录
-        }
-   ```
+        } 
     //根据上一步内网发现的设备，使用AccesKey进行设备连接 如设备未设置AccessKey，连接前需要先进行AccessKey设置。
     //需要在同一个局域网并且设备未设置AccssKey才能设置成功
 	XlinkAgent.getInstance().setDeviceAccessKey(device, key, new SetDeviceAccessKeyListener() {
@@ -422,8 +406,7 @@ SKD会根据网络连接情况自适应内外网络环境，会自动选择速�
                      break;
              }
          }
-     });
-	```
+     }); 
 	 /**
      * 连接设备回调。该回调在主程序，可直接更改ui
      */
@@ -458,10 +441,9 @@ SKD会根据网络连接情况自适应内外网络环境，会自动选择速�
             }
 
         }
-    ```
-	**IOS 调用示例**
-	```
-	```
+   ```
+**IOS 调用示例**
+
 
 ### 2.8 <a name="setp7" >Setp 7 设备控制&接收设备数据</a>
 
