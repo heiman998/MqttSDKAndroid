@@ -1,12 +1,14 @@
 package com.heiman.mqttdemo.base;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * @Author : 肖力 by mac
  * @Time :  2017/12/29 上午11:30
  * @Description :
  * @Modify record :
  */
-public class RegisterDevice {
+public class RegisterDevice extends Code {
 
     /**
      * id : 18605
@@ -17,13 +19,19 @@ public class RegisterDevice {
      * wifiVersion : 1
      * enterpriseId : 1
      */
-
+    @Expose
     private int id;
+    @Expose
     private String mac;
+    @Expose
     private String name;
+    @Expose
     private int productId;
+    @Expose
     private int mcuVersion;
+    @Expose
     private int wifiVersion;
+    @Expose
     private int enterpriseId;
 
     @Override

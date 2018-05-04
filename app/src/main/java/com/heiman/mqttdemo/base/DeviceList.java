@@ -14,7 +14,7 @@ import java.util.List;
  * @Description :
  * @Modify record :
  */
-public class DeviceList {
+public class DeviceList extends Code {
 
     /**
      * list : [{"id":18611,"mac":"845DD7681AD3","productId":10000,"mcuVersion":1,"role":"deviceadmin","source":1,"authority":true}]
@@ -22,10 +22,13 @@ public class DeviceList {
      * limit : 100
      * offset : 0
      */
-
+    @Expose
     private int count;
+    @Expose
     private int limit;
+    @Expose
     private int offset;
+    @Expose
     private List<ListBean> list;
 
     public int getCount() {
@@ -70,13 +73,19 @@ public class DeviceList {
          * source : 1
          * authority : true
          */
-
+        @Expose
         private int id;
+        @Expose
         private String mac;
+        @Expose
         private int productId;
+        @Expose
         private int mcuVersion;
+        @Expose
         private String role;
+        @Expose
         private int source;
+        @Expose
         private boolean authority;
         @Expose
         private String name;

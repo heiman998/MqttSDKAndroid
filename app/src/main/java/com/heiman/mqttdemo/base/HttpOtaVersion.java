@@ -1,12 +1,14 @@
 package com.heiman.mqttdemo.base;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * @Author : 肖力 by mac
  * @Time :  2018/1/4 下午2:08
  * @Description :
  * @Modify record :
  */
-public class HttpOtaVersion {
+public class HttpOtaVersion extends Code {
 
     /**
      * size : 固件长度
@@ -19,15 +21,23 @@ public class HttpOtaVersion {
      * otaDetail : 升级任务详情
      * sub_index : 子设备在父设备下的index
      */
-
+    @Expose
     private String size;
+    @Expose
     private String md5;
+    @Expose
     private String version;
+    @Expose
     private String productId;
+    @Expose
     private String url;
+    @Expose
     private String otaId;
+    @Expose
     private String initVersion;
+    @Expose
     private String otaDetail;
+    @Expose
     private String sub_index;
 
     @Override

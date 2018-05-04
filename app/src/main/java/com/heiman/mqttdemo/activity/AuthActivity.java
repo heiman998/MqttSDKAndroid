@@ -115,11 +115,11 @@ public class AuthActivity extends BaseActivity {
     }
 
     private void registerUser() {
-        registerUserByMail(SharedPreferencesUtil.queryValue(Constant.SAVE_EMAIL_ID), SharedPreferencesUtil.queryValue(Constant.SAVE_PASSWPRD_ID));
+        registerUserByMail(SharedPreferencesUtil.queryValue(Constant.SAVE_EMAIL_ID), SharedPreferencesUtil.queryValue(Constant.SAVE_PASSWPRD_ID), false);
     }
 
-    private void registerUserByMail(String uid, String pwd) {
-        HmHttpManage.getInstance().onRegister(uid, pwd, new Dialogback<Code<Object>>(this) {
+    private void registerUserByMail(String uid, String pwd, boolean isActivation) {
+        HmHttpManage.getInstance().onRegister(uid, pwd, isActivation, new Dialogback<Code<Object>>(this) {
             @Override
             public void onSuccess(Response<Code<Object>> response) {
                 Logger.i(response.message());

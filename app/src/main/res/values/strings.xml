@@ -56,7 +56,7 @@
     <string name="Arming"> arming</string>
     <string name="TOVC_H"> heavy pollution </string>
     <string name="TOVC_S"> mild pollution </string>
-    <string name="PM2.5"> PM25 alarm </string>
+    <string name="PM25"> PM25 alarm </string>
     <string name="PM10"> PM10 alarm </string>
     <string name="CHCO"> formaldehyde alarm </string>
     <string name="tempup"> high temperature alarm </string>
@@ -181,4 +181,5 @@
     <string name="Getbasicinformation">Get basic information</string>
     <string name="timezone">timezone</string>
     <string name="title_activity_maps">Map</string>
+    <string name="rgb">智能彩灯</string>
 </resources>

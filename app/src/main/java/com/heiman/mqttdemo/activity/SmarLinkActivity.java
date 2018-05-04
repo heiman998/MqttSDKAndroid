@@ -21,6 +21,7 @@ import com.heiman.mqttdemo.R;
 import com.heiman.mqttdemo.back.Dialogback;
 import com.heiman.mqttdemo.base.Device;
 import com.heiman.mqttdemo.base.RegisterDevice;
+import com.heiman.mqttsdk.HmAgent;
 import com.heiman.mqttsdk.http.HmHttpManage;
 import com.heiman.mqttsdk.modle.DeviceBean;
 import com.heiman.mqttsdk.modle.HmDevice;
@@ -101,6 +102,7 @@ public class SmarLinkActivity extends BaseActivity implements View.OnClickListen
                             Device device = new Device();
                             device.setMac(response.body().getMac());
                             device.setHmDevice(hmDevice);
+                            HmAgent.getInstance().initDevice(device.getHmDeviceSDK());
                             DeviceManage.getInstance().addDevice(device);
                             Message message = new Message();
                             message.obj = response.body();
@@ -126,9 +128,11 @@ public class SmarLinkActivity extends BaseActivity implements View.OnClickListen
                     HmHttpManage.getInstance().onSubscribeDevice(registerDevice.getId(), new Dialogback<Object>(SmarLinkActivity.this) {
                         @Override
                         public void onSuccess(Response<Object> response) {
-                            Logger.i(response.message());
-                            Logger.i(response.body().toString());
-                            Logger.i(response.code() + "");
+                            if (response != null && response.body() != null) {
+                                Logger.i(response.message());
+                                Logger.i(response.body().toString());
+                                Logger.i(response.code() + "");
+                            }
                         }
 
                         @Override

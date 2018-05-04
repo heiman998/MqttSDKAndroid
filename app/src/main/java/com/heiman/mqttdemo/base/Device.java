@@ -39,8 +39,7 @@ public class Device extends DataSupport implements Serializable {
     }
 
     public void setHmDevice(HmDevice hmDevice) {
-        String hm = HmAgent.getInstance().hmDeviceToJson(hmDevice);
-        this.hmDevice = hm;
+        this.hmDevice = HmAgent.getInstance().hmDeviceToJson(hmDevice);
     }
 
     public void setHmDevice(String hmDevice) {

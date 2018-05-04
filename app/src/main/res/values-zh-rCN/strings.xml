@@ -59,6 +59,7 @@
     <string name="Arming">布防</string>
     <string name="TOVC_H">重度污染</string>
     <string name="TOVC_S">轻度污染</string>
+    <string name="RGB"> smart lantern </string>
     <string name="PM25">PM2.5超标报警</string>
     <string name="PM10">PM10超标报警</string>
     <string name="CHCO">甲醛超标报警</string>
@@ -184,5 +185,5 @@
     <string name="Savesuccess">保存成功</string>
     <string name="Getbasicinformation">获取基本信息</string>
     <string name="timezone">设置时区</string>
-
+    <string name="title_activity_maps">Map</string>
 </resources>

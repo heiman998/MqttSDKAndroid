@@ -7,6 +7,7 @@ import android.text.TextUtils;
 
 import com.heiman.mqttdemo.base.Device;
 import com.heiman.mqttsdk.HmAgent;
+import com.heiman.utils.HmUtils;
 import com.orhanobut.logger.Logger;
 
 import org.litepal.crud.DataSupport;
@@ -76,6 +77,9 @@ public class DeviceManage {
      */
     public void addDevice(final Device dev) {
         if (dev == null) {
+            return;
+        }
+        if (HmUtils.isEmptyString(dev.getMac())) {
             return;
         }
         deviceMap.put(dev.getMac(), dev);

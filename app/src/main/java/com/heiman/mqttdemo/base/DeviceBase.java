@@ -1,17 +1,23 @@
 package com.heiman.mqttdemo.base;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * @Author : 肖力 by mac
  * @Time :  2018/1/3 下午2:20
  * @Description :
  * @Modify record :
  */
-public class DeviceBase {
-
+public class DeviceBase extends Code {
+    @Expose
     private String deviceName;
+    @Expose
     private String deviceMac;
+    @Expose
     private String subMac;
+    @Expose
     private int subIndex;
+    @Expose
     private boolean isOnline;
 
     @Override

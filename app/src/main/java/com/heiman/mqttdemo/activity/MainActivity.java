@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.heiman.mqttdemo.Constant;
+import com.heiman.mqttdemo.HmApplication;
 import com.heiman.mqttdemo.Manage.DeviceManage;
 import com.heiman.mqttdemo.R;
 import com.heiman.mqttdemo.adpter.DeviceAdpter;
@@ -30,7 +31,6 @@ import com.heiman.mqttsdk.listtner.HmStart;
 import com.heiman.mqttsdk.manage.HmDeviceManage;
 import com.heiman.mqttsdk.manage.HmSubDeviceManage;
 import com.heiman.mqttsdk.modle.HmDevice;
-import com.heiman.mqttsdk.modle.HmDeviceType;
 import com.heiman.mqttsdk.modle.HmSubDevice;
 import com.heiman.utils.HmUtils;
 import com.hss01248.dialog.StyledDialog;
@@ -129,6 +129,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void onSuccess(Object data, int flag) {
                 Logger.w(Constants.LogTag, "+++ register push sucess. token:" + data + "flag" + flag);
+                HmHttpManage.getInstance().onRegisterXG("3", data.toString(), new Dialogback<Object>(MainActivity.this) {
+                    @Override
+                    public void onSuccess(Response<Object> response) {
+
+                    }
+                });
             }
 
             @Override
@@ -377,8 +383,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                         @Override
                         public void onNext(DeviceList.ListBean value) {
                             final Device device = value.listToDevice();
+                            Logger.i("开始添加设备");
                             DeviceManage.getInstance().addDevice(device);
                             DeviceBase deviceBase = new DeviceBase();
+                            Logger.i("完成");
                             deviceBase.setDeviceMac(value.getMac());
                             if (!HmUtils.isEmptyString(value.getName())) {
                                 deviceBase.setDeviceName(value.getName());
@@ -398,6 +406,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                                         if (hmSubDevice == null) {
                                             hmSubDevice = new HmSubDevice();
                                         }
+                                        hmSubDevice.setDeviceId(listBean.getId());
                                         hmSubDevice.setIndex(listBean.getSubIndex());
                                         hmSubDevice.setDeviceMac(listBean.getMac());
                                         hmSubDevice.setDeviceType(listBean.getProductId());
@@ -476,7 +485,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.btn_add_device:
 
                 Bundle paramBundle = new Bundle();
-                paramBundle.putInt(Constant.TYPE, HmDeviceType.DEVICE_WIFI_GATEWAY_HS1GW_NEW.getValue());
+                paramBundle.putInt(Constant.TYPE, HmConstant.DEVICE_TYPE.DEVICE_WIFI_GATEWAY_HS1GW_NEW);
                 openActivity(SmarLinkActivity.class, paramBundle);
                 break;
         }

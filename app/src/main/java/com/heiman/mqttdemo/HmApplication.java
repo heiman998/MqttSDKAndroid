@@ -214,17 +214,17 @@ public class HmApplication extends Application implements HmNetListener, HmGatew
         Device device = DeviceManage.getInstance().getDevice(hmDevice.getDeviceMac());
         device.setHmDevice(hmDevice);
         DeviceManage.getInstance().addDevice(device);
-        sendPipeBroad(Constant.DEVICE_INFO, hmDevice, Convert.toJson(hmDevice));
+        sendPipeBroad(Constant.DEVICE_INFO, hmDevice, hmDevice.toString());
     }
 
     @Override
     public void onSubDeviceInfo(HmDevice hmDevice, HmSubDevice hmSubDevice) {
-        sendPipeBroad(Constant.DEVICE_INFO, hmDevice, Convert.toJson(hmSubDevice));
+        sendPipeBroad(Constant.DEVICE_INFO, hmDevice, hmSubDevice.toString());
     }
 
     @Override
     public void onGatewayInfo(HmDevice hmDevice, HmGatewayInfo hmGatewayInfo) {
-        sendPipeBroad(Constant.GATEWAT_INFO, hmDevice, Convert.toJson(hmGatewayInfo));
+        sendPipeBroad(Constant.GATEWAT_INFO, hmDevice,hmGatewayInfo.toString());
     }
 
     @Override
@@ -255,42 +255,42 @@ public class HmApplication extends Application implements HmNetListener, HmGatew
 
     @Override
     public void onRgbSetting(HmDevice hmDevice, int index, HmRgb hmRgb) {
-        sendPipeBroad(Constant.RGB_SETTING, hmDevice, Convert.toJson(hmRgb));
+        sendPipeBroad(Constant.RGB_SETTING, hmDevice, hmRgb.toString());
     }
 
     @Override
     public void onThpSetting(HmDevice hmDevice, int index, HmThp hmThp) {
-        sendPipeBroad(Constant.THP_SETTING, hmDevice, Convert.toJson(hmThp));
+        sendPipeBroad(Constant.THP_SETTING, hmDevice, hmThp.toString());
     }
 
     @Override
     public void onPlugSetting(HmDevice hmDevice, int index, HmPlug hmPlug) {
-        sendPipeBroad(Constant.PLUG_SETTING, hmDevice,hmPlug.getJsonString());
+        sendPipeBroad(Constant.PLUG_SETTING, hmDevice, hmPlug.getJsonString());
     }
 
     @Override
     public void onEPlugSetting(HmDevice hmDevice, int index, HmEPlug hmEPlug) {
-        sendPipeBroad(Constant.EPLUG_SETTING, hmDevice, Convert.toJson(hmEPlug));
+        sendPipeBroad(Constant.EPLUG_SETTING, hmDevice, hmEPlug.toString());
     }
 
     @Override
     public void onOnoffSetting(HmDevice hmDevice, int index, HmOnoff hmOnoff) {
-        sendPipeBroad(Constant.ONOFF_SETTING, hmDevice, Convert.toJson(hmOnoff));
+        sendPipeBroad(Constant.ONOFF_SETTING, hmDevice, hmOnoff.toString());
     }
 
     @Override
     public void onfourLightSetting(HmDevice hmDevice, int index, HmFourLight hmFourLight) {
-        sendPipeBroad(Constant.FOUR_LIGH_SETTING, hmDevice, Convert.toJson(hmFourLight));
+        sendPipeBroad(Constant.FOUR_LIGH_SETTING, hmDevice, hmFourLight.toString());
     }
 
     @Override
     public void onSoundLightAlarmSetting(HmDevice hmDevice, int index, HmSoundLightAlarm hmSoundLightAlarm) {
-        sendPipeBroad(Constant.LIGH_ALARM_SETTING, hmDevice, Convert.toJson(hmSoundLightAlarm));
+        sendPipeBroad(Constant.LIGH_ALARM_SETTING, hmDevice, hmSoundLightAlarm.toString());
     }
 
     @Override
     public void onRelay(HmDevice hmDevice, int index, HmRelay hmRelay) {
-        sendPipeBroad(Constant.LIGH_ALARM_SETTING, hmDevice, "设备index：" + index + "数据：" + Convert.toJson(hmRelay));
+        sendPipeBroad(Constant.LIGH_ALARM_SETTING, hmDevice, "设备index：" + index + "数据：" + hmRelay.toString());
     }
 
     @Override
@@ -305,7 +305,7 @@ public class HmApplication extends Application implements HmNetListener, HmGatew
 
     @Override
     public void onAlarmTimer(HmDevice hmDevice, int type, HmTimer hmTimer) {
-        sendPipeBroad(Constant.LIGH_ALARM_SETTING, hmDevice, "类型：" + type + "数据：" + Convert.toJson(hmTimer));
+        sendPipeBroad(Constant.LIGH_ALARM_SETTING, hmDevice, "类型：" + type + "数据：" + hmTimer.toString());
     }
 
     @Override

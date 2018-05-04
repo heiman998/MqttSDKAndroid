@@ -28,12 +28,14 @@ import com.heiman.mqttsdk.HmConstant;
 import com.heiman.mqttsdk.http.HmHttpManage;
 import com.heiman.mqttsdk.listtner.HmPublishListener;
 import com.heiman.mqttsdk.manage.HmDeviceManage;
+import com.heiman.mqttsdk.modle.HmAlarmList;
 import com.heiman.mqttsdk.modle.HmComOID;
 import com.heiman.mqttsdk.modle.HmCurtainController;
 import com.heiman.mqttsdk.modle.HmDevice;
 import com.heiman.mqttsdk.modle.HmEPlug;
 import com.heiman.mqttsdk.modle.HmFourLight;
 import com.heiman.mqttsdk.modle.HmGatewayInfo;
+import com.heiman.mqttsdk.modle.HmGetAlarm;
 import com.heiman.mqttsdk.modle.HmIntelligentDoorLock;
 import com.heiman.mqttsdk.modle.HmOnoff;
 import com.heiman.mqttsdk.modle.HmPlug;
@@ -44,6 +46,7 @@ import com.heiman.mqttsdk.modle.HmSubDevice;
 import com.heiman.mqttsdk.modle.HmThp;
 import com.heiman.mqttsdk.modle.HmTimer;
 import com.heiman.mqttsdk.modle.OTAVersion;
+import com.heiman.utils.Convert;
 import com.heiman.utils.HmUtils;
 import com.lzy.okgo.model.Response;
 import com.mylhyl.circledialog.CircleDialog;
@@ -366,6 +369,25 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                         }
                         break;
                         case DEVICE_ZIGBEE_SMOKE: {
+                            HmGetAlarm hmGetAlarm = new HmGetAlarm();
+                            HmGetAlarm.CustomBean customBean = new HmGetAlarm.CustomBean();
+                            HmGetAlarm.HelpBean helpBean = new HmGetAlarm.HelpBean();
+                            helpBean.setLimit(50 + "");
+                            helpBean.setOffset(0 + "");
+                            customBean.setDeviceId(hmSubDevice.getDeviceId() + "");
+//                            customBean.setProductId(20 + "");
+                            hmGetAlarm.setCustom(customBean);
+                            hmGetAlarm.setHelp(helpBean);
+                            hmGetAlarm.setDesc(true);
+                            HmHttpManage.getInstance().getAlarmList(hmGetAlarm, new Dialogback<HmAlarmList>(DeviceActivity.this) {
+                                @Override
+                                public void onSuccess(Response<HmAlarmList> response) {
+                                    if (response.body() != null) {
+                                        Log("获取到:" + response.body());
+
+                                    }
+                                }
+                            });
                         }
                         break;
                         case DEVICE_ZIGBEE_THP: {
@@ -379,6 +401,25 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                         }
                         break;
                         case DEVICE_ZIGBEE_GAS: {
+                            HmGetAlarm hmGetAlarm = new HmGetAlarm();
+                            HmGetAlarm.CustomBean customBean = new HmGetAlarm.CustomBean();
+                            HmGetAlarm.HelpBean helpBean = new HmGetAlarm.HelpBean();
+                            helpBean.setLimit(50 + "");
+                            helpBean.setOffset(0 + "");
+                            customBean.setDeviceId(hmSubDevice.getDeviceId() + "");
+//                            customBean.setProductId(20 + "");
+//                            hmGetAlarm.setCustom(customBean);
+                            hmGetAlarm.setHelp(helpBean);
+                            hmGetAlarm.setDesc(true);
+                            HmHttpManage.getInstance().getAlarmList(hmGetAlarm, new Dialogback<HmAlarmList>(DeviceActivity.this) {
+                                @Override
+                                public void onSuccess(Response<HmAlarmList> response) {
+                                    if (response.body() != null) {
+                                        Log("获取到:" + response.body());
+
+                                    }
+                                }
+                            });
                         }
                         break;
                         case DEVICE_ZIGBEE_SOUND_AND_LIGHT_ALARM: {
@@ -475,11 +516,13 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
         HmAgent.getInstance().sendHexStringData(hmDevice, data, hmPublishListener);
     }
 
+    private boolean isFZ = false;
+
     /**
      * 设置列表
      */
     private void showSendSetList() {
-        final String[] items = {"设置网关信息", "设置时区", "添加子设备", "设备升级", "设置网关ip", "设置在家布防定时", "设置一键开关灯"};
+        final String[] items = {"设置网关信息", "设置时区", "添加子设备", "设备升级", "设置网关ip", "设置在家布防定时", "设置一键开关灯", "在家布防", "外出布防", "撤防", "中文", "英文", "获取报警日记", "获取point当前值"};
         new CircleDialog.Builder(this)
                 .configDialog(new ConfigDialog() {
                     @Override
@@ -496,13 +539,26 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                         switch (position) {
                             case 0:
                                 HmGatewayInfo hmGatewayInfo = new HmGatewayInfo();
-                                hmGatewayInfo.setArmtype(2);
-                                hmGatewayInfo.setLgtimer(10);
-                                hmGatewayInfo.setGwlightonoff(1);
-                                hmGatewayInfo.setGwlightlevel(88);
-                                hmGatewayInfo.setGwlanguage(1);
-                                hmGatewayInfo.setBetimer(10);
-                                hmGatewayInfo.setSoundlevel(89);
+                                if (isFZ) {
+                                    hmGatewayInfo.setArmtype(1);
+                                    hmGatewayInfo.setLgtimer(100);
+                                    hmGatewayInfo.setGwlightonoff(0);
+                                    hmGatewayInfo.setGwlightlevel(10);
+                                    hmGatewayInfo.setGwlanguage(0x30);
+                                    hmGatewayInfo.setBetimer(30);
+                                    hmGatewayInfo.setSoundlevel(10);
+                                    hmGatewayInfo.setAlarmlevel(10);
+                                } else {
+                                    hmGatewayInfo.setArmtype(2);
+                                    hmGatewayInfo.setLgtimer(10);
+                                    hmGatewayInfo.setGwlightonoff(1);
+                                    hmGatewayInfo.setGwlightlevel(88);
+                                    hmGatewayInfo.setGwlanguage(0x31);
+                                    hmGatewayInfo.setBetimer(10);
+                                    hmGatewayInfo.setSoundlevel(89);
+                                    hmGatewayInfo.setAlarmlevel(20);
+                                }
+                                isFZ = !isFZ;
                                 Log("发送:" + hmGatewayInfo.toString());
                                 HmAgent.getInstance().setGwInfo(hmDevice, hmGatewayInfo, hmPublishListener);
                                 break;
@@ -512,39 +568,44 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                                 Log("发送:" + TimerZone);
                                 break;
                             case 2:
-                                HmAgent.getInstance().addSubDevice(hmDevice, true, hmPublishListener);
+                                HmAgent.getInstance().addSubDevice(hmDevice, isFZ, hmPublishListener);
+                                isFZ = !isFZ;
                                 break;
                             case 3:
                                 OTAVersion otaVersion = new OTAVersion();
                                 List<String> father = new ArrayList<>();
                                 father.add(hmDevice.getDeviceID() + "");
                                 otaVersion.setFather(father);
-                                HmHttpManage.getInstance().getOtaVersion(otaVersion, new Dialogback<List<HttpOtaVersion>>(DeviceActivity.this) {
-                                    @Override
-                                    public void onSuccess(Response<List<HttpOtaVersion>> response) {
-                                        Logger.i(response.message());
-                                        Logger.i(response.body().toString());
-                                        Logger.i(response.code() + "");
-                                        if (HmUtils.isEmptyList(response.body())) {
-                                            Log("未发现升级固件");
-                                            return;
-                                        }
-                                        Message message = new Message();
-                                        message.obj = response.body();
-                                        message.what = SEND_OTA_DEVICE;
-                                        mHandler.sendMessage(message);
-                                    }
-
-                                    @Override
-                                    public void onError(Response<List<HttpOtaVersion>> response) {
-
-                                        if (response != null) {
+                                try {
+                                    HmHttpManage.getInstance().getOtaVersion(otaVersion, new Dialogback<List<HttpOtaVersion>>(DeviceActivity.this) {
+                                        @Override
+                                        public void onSuccess(Response<List<HttpOtaVersion>> response) {
                                             Logger.i(response.message());
+                                            Logger.i(response.body().toString());
                                             Logger.i(response.code() + "");
-                                            Logger.i(response.getException() + "");
+                                            if (HmUtils.isEmptyList(response.body())) {
+                                                Log("未发现升级固件");
+                                                return;
+                                            }
+                                            Message message = new Message();
+                                            message.obj = response.body();
+                                            message.what = SEND_OTA_DEVICE;
+                                            mHandler.sendMessage(message);
                                         }
-                                    }
-                                });
+
+                                        @Override
+                                        public void onError(Response<List<HttpOtaVersion>> response) {
+
+                                            if (response != null) {
+                                                Logger.i(response.message());
+                                                Logger.i(response.code() + "");
+                                                Logger.i(response.getException() + "");
+                                            }
+                                        }
+                                    });
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
 
                                 break;
                             case 4:
@@ -568,6 +629,74 @@ public class DeviceActivity extends BaseActivity implements View.OnClickListener
                                 onoff = !onoff;
                                 Log("发送:" + onoff);
                                 HmAgent.getInstance().setLightOnoff(hmDevice, onoff1, hmPublishListener);
+                                break;
+                            case 7:
+                                HmGatewayInfo hmGatewayInfo2 = new HmGatewayInfo();
+                                hmGatewayInfo2.setArmtype(2);
+                                Log("发送:" + hmGatewayInfo2.toString());
+                                HmAgent.getInstance().setGwInfo(hmDevice, hmGatewayInfo2, hmPublishListener);
+                                break;
+                            case 8:
+                                HmGatewayInfo hmGatewayInfo1 = new HmGatewayInfo();
+                                hmGatewayInfo1.setArmtype(1);
+                                Log("发送:" + hmGatewayInfo1.toString());
+                                HmAgent.getInstance().setGwInfo(hmDevice, hmGatewayInfo1, hmPublishListener);
+                                break;
+                            case 9:
+                                HmGatewayInfo hmGatewayInfo0 = new HmGatewayInfo();
+                                hmGatewayInfo0.setArmtype(0);
+                                Log("发送:" + hmGatewayInfo0.toString());
+                                HmAgent.getInstance().setGwInfo(hmDevice, hmGatewayInfo0, hmPublishListener);
+                                break;
+                            case 10:
+                                HmGatewayInfo hmGatewayInfoz = new HmGatewayInfo();
+                                hmGatewayInfoz.setGwlanguage(2);
+                                Log("发送:" + hmGatewayInfoz.toString());
+                                HmAgent.getInstance().setGwInfo(hmDevice, hmGatewayInfoz, hmPublishListener);
+                                break;
+                            case 11:
+                                HmGatewayInfo hmGatewayInfou = new HmGatewayInfo();
+                                hmGatewayInfou.setGwlanguage(1);
+                                Log("发送:" + hmGatewayInfou.toString());
+                                HmAgent.getInstance().setGwInfo(hmDevice, hmGatewayInfou, hmPublishListener);
+                                break;
+                            case 12:
+                                HmGetAlarm hmGetAlarm = new HmGetAlarm();
+                                HmGetAlarm.CustomBean customBean = new HmGetAlarm.CustomBean();
+                                HmGetAlarm.HelpBean helpBean = new HmGetAlarm.HelpBean();
+                                helpBean.setLimit(50 + "");
+                                helpBean.setOffset(0 + "");
+                                customBean.setMac(hmDevice.getDeviceMac());
+                                customBean.setProductId(hmDevice.getPid() + "");
+                                hmGetAlarm.setCustom(customBean);
+                                hmGetAlarm.setHelp(helpBean);
+                                hmGetAlarm.setDesc(true);
+                                HmHttpManage.getInstance().getAlarmList(hmGetAlarm, new Dialogback<HmAlarmList>(DeviceActivity.this) {
+                                    @Override
+                                    public void onSuccess(Response<HmAlarmList> response) {
+                                        if (response.body() != null) {
+                                            Log("获取到:" + response.body());
+
+                                        }
+//                                        try {
+//                                            if (!response.body().getHelp().getCount().equals("0")) {
+//                                                Log("获取到:" + response.body());
+//                                            }
+//                                        } catch (Exception e) {
+//                                            Log("错误:" + e.getMessage());
+//                                        }
+                                    }
+                                });
+                                break;
+                            case 13:
+                                HmHttpManage.getInstance().getPoint(hmDevice.getDeviceID(), new Dialogback<Object>(DeviceActivity.this) {
+                                    @Override
+                                    public void onSuccess(Response<Object> response) {
+                                        if (response != null && response.code() == 200) {
+                                            Log("获取到:" + response.body());
+                                        }
+                                    }
+                                });
                                 break;
                         }
                     }
